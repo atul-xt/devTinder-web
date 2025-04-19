@@ -1,11 +1,62 @@
 import { EnvelopeIcon, LockClosedIcon } from '@heroicons/react/16/solid'
-import React from 'react'
-import { Link } from 'react-router-dom'
+import React, { useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
+import { API_URL } from '../config/config';
+import Alert from './Alert';
 
 const Login = () => {
+  const [error, setError] = useState("");
+  const [emailId, setEmailId] = useState("");
+  const [password, setPassword] = useState("");
+  const [loginInfo, setLoginInfo] = useState({});
+  const [showAlert, setShowAlert] = useState(false);
+  const [loader, setLoader] = useState(false);
+
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoader(true);
+    setShowAlert(false);
+    setError("");
+
+    try {
+      const formData = { emailId, password }
+      const response = await fetch(`${API_URL}login`, {
+        method: "POST",
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(formData)
+      })
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        const errorMessage = data.message || "Login failed. Please try again.";
+        setError(errorMessage);
+        return;
+      }
+
+      setLoginInfo(data);
+      setShowAlert(true);
+
+      setTimeout(() => {
+        setShowAlert(false);
+        navigate("/");
+      }, 1500);
+
+    } catch (error) {
+      console.error("Login error:", err);
+      setError("Something went wrong. Please check your internet connection.");
+    } finally {
+      setLoader(false);
+    }
+  }
   return (
     <div className="flex min-h-full flex-1 flex-col justify-center py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
+        {showAlert && <Alert message={loginInfo.message} />}
         <div className='flex justify-center'>
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -87,7 +138,7 @@ const Login = () => {
 
       <div className="mt-10 mx-auto w-full max-w-[480px] max-sm:px-3">
         <div className="bg-white px-6 py-12 shadow rounded-lg sm:px-12">
-          <form action="#" method="POST" className="space-y-6">
+          <form onSubmit={handleSubmit} className="space-y-6">
             <div>
               <label htmlFor="email" className="block text-sm/6 font-medium text-gray-900">
                 Email
@@ -97,6 +148,8 @@ const Login = () => {
                   id="email"
                   name="email"
                   type="email"
+                  value={emailId}
+                  onChange={(e) => setEmailId(e.target.value)}
                   placeholder="you@example.com"
                   className="col-start-1 row-start-1 block w-full rounded-md bg-white py-1.5 pl-10 pr-3 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:pl-9 sm:text-sm/6"
                 />
@@ -115,6 +168,8 @@ const Login = () => {
                   id="password"
                   name="password"
                   type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                   placeholder="✸✸✸✸✸✸✸✸"
                   className="col-start-1 row-start-1 block w-full rounded-md bg-white py-1.5 pl-10 pr-3 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:pl-9 sm:text-sm/6"
                 />
@@ -162,19 +217,25 @@ const Login = () => {
               </div>
 
               <div className="text-sm/6">
-                <a href="#" className="font-semibold text-indigo-600 hover:text-indigo-500">
+                <Link to="#" className="font-semibold text-indigo-600 hover:text-indigo-500">
                   Forgot password?
-                </a>
+                </Link>
               </div>
             </div>
             <div>
               <button
                 type="submit"
+                disabled={loader}
                 className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
               >
-                Login
+                {loader ? <span className="loading loading-infinity loading-xl"></span> : "Login"}
               </button>
             </div>
+            {error && (
+              <div className="mt-2 text-sm text-red-600">
+                {error}
+              </div>
+            )}
           </form>
           <div>
             <div className="relative mt-10">
