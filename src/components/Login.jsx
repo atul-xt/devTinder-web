@@ -47,7 +47,7 @@ const Login = () => {
       }, 1500);
 
     } catch (error) {
-      console.error("Login error:", err);
+      console.error("Login error:", error);
       setError("Something went wrong. Please check your internet connection.");
     } finally {
       setLoader(false);
