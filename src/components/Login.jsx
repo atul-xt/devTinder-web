@@ -7,11 +7,11 @@ import axios from 'axios';
 
 const Login = () => {
   const [error, setError] = useState("");
-  const [emailId, setEmailId] = useState("@gmail.com");
-  const [password, setPassword] = useState("@2885");
+  const [emailId, setEmailId] = useState("");
+  const [password, setPassword] = useState("");
   const [loader, setLoader] = useState(false);
   const { setUser } = useAuth();
-  
+
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
