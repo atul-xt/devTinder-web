@@ -12,9 +12,19 @@ const genders = [
 ]
 
 const Signup = () => {
+  const [formData, setFormData] = useState({
+    firstName: "",
+    lastName: "",
+    emailId: "",
+    password: "",
+    gender: "",
+    age: "",
+    profileUrl: "",
+    skills: [],
+    about: ""
+  })
   const [selectedSkills, setSelectedSkills] = useState([]);
 
-  // Your skills list
   const skillsList = [
     "HTML", "CSS", "JavaScript", "TypeScript", "React", "Next.js", "Vue.js",
     "Angular", "Node.js", "Express", "MongoDB", "GraphQL", "MySQL", "PostgreSQL",
@@ -22,15 +32,24 @@ const Signup = () => {
     "Tailwind CSS", "Redux", "Zustand", "Docker", "Firebase"
   ];
 
-  // Format the skills list for React Select
   const formattedSkills = skillsList.map((skill) => ({
     value: skill,
     label: skill
-  }));
+  }));  
 
   const handleChange = (selectedOption) => {
-    setSelectedSkills(selectedOption);
+    const valuesArray = selectedOption.map((option) => option.value.toLowerCase());
+    
+  
+    setSelectedSkills(valuesArray);
   };
+
+console.log(formData.firstName);
+
+
+  
+  
+  
 
   return (
     <div className="flex min-h-full flex-1 flex-col justify-center py-12 px-3 sm:px-6 lg:px-8">
@@ -267,7 +286,7 @@ const Signup = () => {
                   <Select
                     isMulti
                     options={formattedSkills}
-                    value={selectedSkills}
+                    value={formattedSkills.filter(skill => selectedSkills.includes(skill.value.toLowerCase()))}
                     onChange={handleChange}
                     getOptionLabel={(e) => <span className="text-sm text-gray-900">{e.label}</span>}
                     className="basic-multi-select"

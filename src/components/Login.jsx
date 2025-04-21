@@ -6,8 +6,8 @@ import Alert from './Alert';
 
 const Login = () => {
   const [error, setError] = useState("");
-  const [emailId, setEmailId] = useState("");
-  const [password, setPassword] = useState("");
+  const [emailId, setEmailId] = useState("atul@gmail.com");
+  const [password, setPassword] = useState("Atul@2885");
   const [loginInfo, setLoginInfo] = useState({});
   const [showAlert, setShowAlert] = useState(false);
   const [loader, setLoader] = useState(false);
@@ -27,7 +27,8 @@ const Login = () => {
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify(formData)
+        body: JSON.stringify(formData),
+        credentials: 'include'
       })
 
       const data = await response.json();
