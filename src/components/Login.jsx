@@ -2,62 +2,54 @@ import { EnvelopeIcon, LockClosedIcon } from '@heroicons/react/16/solid'
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { API_URL } from '../config/config';
-import Alert from './Alert';
+import { useAuth } from '../context/AuthContext';
+import axios from 'axios';
 
 const Login = () => {
   const [error, setError] = useState("");
-  const [emailId, setEmailId] = useState("atul@gmail.com");
-  const [password, setPassword] = useState("Atul@2885");
-  const [loginInfo, setLoginInfo] = useState({});
-  const [showAlert, setShowAlert] = useState(false);
+  const [emailId, setEmailId] = useState("@gmail.com");
+  const [password, setPassword] = useState("@2885");
   const [loader, setLoader] = useState(false);
-
+  const { setUser } = useAuth();
+  
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoader(true);
-    setShowAlert(false);
     setError("");
 
     try {
-      const formData = { emailId, password }
-      const response = await fetch(`${API_URL}login`, {
-        method: "POST",
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(formData),
-        credentials: 'include'
-      })
+      const res = await axios.post(`${API_URL}login`, {
+        emailId,
+        password
+      }, {
+        withCredentials: true
+      });
 
-      const data = await response.json();
-
-      if (!response.ok) {
-        const errorMessage = data.message || "Login failed. Please try again.";
-        setError(errorMessage);
-        return;
-      }
-
-      setLoginInfo(data);
-      setShowAlert(true);
-
-      setTimeout(() => {
-        setShowAlert(false);
+      if (res.status === 200) {
+        setUser(res?.data?.data);
         navigate("/");
-      }, 1500);
+      }
 
     } catch (error) {
       console.error("Login error:", error);
-      setError("Something went wrong. Please check your internet connection.");
+      if (error.response) {
+        const message = error.response.data?.message || "Login failed. Try again.";
+        setError(message);
+      } else if (error.request) {
+        setError("No response from server. Please check your internet.");
+      } else {
+        setError("Something went wrong. Please try again.");
+      }
     } finally {
       setLoader(false);
     }
   }
+
   return (
     <div className="flex min-h-full flex-1 flex-col justify-center py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
-        {showAlert && <Alert message={loginInfo.message} />}
         <div className='flex justify-center'>
           <svg
             xmlns="http://www.w3.org/2000/svg"

@@ -1,8 +1,11 @@
 import React from 'react'
+import axios from 'axios';
 import { useState } from "react";
-import { Link } from 'react-router-dom'
-import { EnvelopeIcon, LinkIcon, LockClosedIcon, UserCircleIcon } from '@heroicons/react/16/solid'
 import Select from 'react-select';
+import { toast } from 'react-toastify';
+import { Link, useNavigate } from 'react-router-dom'
+import { API_URL } from '../config/config';
+import { EnvelopeIcon, LinkIcon, LockClosedIcon, UserCircleIcon } from '@heroicons/react/16/solid'
 
 
 const genders = [
@@ -11,7 +14,17 @@ const genders = [
   { id: 'others', title: 'Others' },
 ]
 
+const skillsList = [
+  "HTML", "CSS", "JavaScript", "TypeScript", "React", "Next.js", "Vue.js",
+  "Angular", "Node.js", "Express", "MongoDB", "GraphQL", "MySQL", "PostgreSQL",
+  "Python", "Django", "Flask", "Java", "Spring Boot", "C#", ".NET", "Git", "GitHub",
+  "Tailwind CSS", "Redux", "Zustand", "Docker", "Firebase"
+];
+
 const Signup = () => {
+  const navigate = useNavigate();
+  const [loader, setLoader] = useState(false);
+  const [error, setError] = useState("");
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -23,33 +36,59 @@ const Signup = () => {
     skills: [],
     about: ""
   })
-  const [selectedSkills, setSelectedSkills] = useState([]);
 
-  const skillsList = [
-    "HTML", "CSS", "JavaScript", "TypeScript", "React", "Next.js", "Vue.js",
-    "Angular", "Node.js", "Express", "MongoDB", "GraphQL", "MySQL", "PostgreSQL",
-    "Python", "Django", "Flask", "Java", "Spring Boot", "C#", ".NET", "Git", "GitHub",
-    "Tailwind CSS", "Redux", "Zustand", "Docker", "Firebase"
-  ];
 
   const formattedSkills = skillsList.map((skill) => ({
     value: skill,
     label: skill
-  }));  
+  }));
 
   const handleChange = (selectedOption) => {
     const valuesArray = selectedOption.map((option) => option.value.toLowerCase());
-    
-  
-    setSelectedSkills(valuesArray);
+    setFormData((prev) => ({
+      ...prev,
+      skills: valuesArray,
+    }));
   };
 
-console.log(formData.firstName);
+  const handleChangeInput = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
 
+  const handleFormSubmit = async (e) => {
+    e.preventDefault();
+    setLoader(true);
+    setError("");
 
-  
-  
-  
+    try {
+      const res = await axios.post(`${API_URL}signup`, formData, {
+        withCredentials: true
+      });
+
+      if (res.status === 201) {
+        toast.success(res.data.message);
+        setTimeout(() => {
+          navigate("/login")
+        }, 1500);
+      }
+    } catch (error) {
+      console.error("Signup error: ", error);
+
+      if (error.response) {
+        const message = error.response.data?.message || "Signup failed. Try again.";
+        setError(message);
+      } else if (error.request) {
+        setError("No response from server. Please check your internet.");
+      } else {
+        setError("Something went wrong. Please try again.");
+      }
+    } finally {
+      setLoader(false);
+    }
+  }
 
   return (
     <div className="flex min-h-full flex-1 flex-col justify-center py-12 px-3 sm:px-6 lg:px-8">
@@ -135,7 +174,7 @@ console.log(formData.firstName);
 
       <div className="mt-5 mx-auto w-full max-w-3xl">
         <div className="bg-white px-6 py-12 shadow rounded-lg sm:px-12">
-          <form action="#" method="POST" className="space-y-6">
+          <form onSubmit={handleFormSubmit} className="space-y-6">
             <div className='grid grid-cols-1'>
               <div className='grid max-[500px]:grid-cols-1 grid-cols-2 gap-5'>
                 <div className=''>
@@ -150,6 +189,8 @@ console.log(formData.firstName);
                       required
                       autoComplete="firstName"
                       placeholder="your first name"
+                      value={formData.firstName}
+                      onChange={handleChangeInput}
                       className="col-start-1 row-start-1 block w-full rounded-md bg-white py-1.5 pl-10 pr-3 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:pl-9 sm:text-sm/6"
                     />
                     <UserCircleIcon
@@ -170,6 +211,8 @@ console.log(formData.firstName);
                       required
                       autoComplete="lastName"
                       placeholder="your last name"
+                      value={formData.lastName}
+                      onChange={handleChangeInput}
                       className="col-start-1 row-start-1 block w-full rounded-md bg-white py-1.5 pl-10 pr-3 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:pl-9 sm:text-sm/6"
                     />
                     <UserCircleIcon
@@ -181,15 +224,17 @@ console.log(formData.firstName);
               </div>
               <div className='mt-3 grid max-[500px]:grid-cols-1 grid-cols-2 gap-5'>
                 <div className=''>
-                  <label htmlFor="email" className="block text-sm/6 font-medium text-gray-900">
+                  <label htmlFor="emailId" className="block text-sm/6 font-medium text-gray-900">
                     Email
                   </label>
                   <div className="mt-2 grid grid-cols-1">
                     <input
-                      id="email"
-                      name="email"
+                      id="emailId"
+                      name="emailId"
                       type="email"
                       placeholder="you@example.com"
+                      value={formData.emailId}
+                      onChange={handleChangeInput}
                       className="col-start-1 row-start-1 block w-full rounded-md bg-white py-1.5 pl-10 pr-3 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:pl-9 sm:text-sm/6"
                     />
                     <EnvelopeIcon
@@ -208,6 +253,8 @@ console.log(formData.firstName);
                       name="password"
                       type="password"
                       placeholder="✸✸✸✸✸✸✸✸"
+                      value={formData.password}
+                      onChange={handleChangeInput}
                       className="col-start-1 row-start-1 block w-full rounded-md bg-white py-1.5 pl-10 pr-3 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:pl-9 sm:text-sm/6"
                     />
                     <LockClosedIcon
@@ -226,10 +273,12 @@ console.log(formData.firstName);
                     {genders.map((gender) => (
                       <div key={gender.id} className="flex items-center">
                         <input
-                          defaultChecked={gender.id === 'male'}
+                          checked={formData.gender === gender.id}
                           id={gender.id}
                           name="gender"
                           type="radio"
+                          value={gender.id}
+                          onChange={handleChangeInput}
                           className="relative size-4 appearance-none rounded-full border border-gray-300 bg-white before:absolute before:inset-1 before:rounded-full before:bg-white checked:border-indigo-600 checked:bg-indigo-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:border-gray-300 disabled:bg-gray-100 disabled:before:bg-gray-400 forced-colors:appearance-auto forced-colors:before:hidden [&:not(:checked)]:before:hidden"
                         />
                         <label htmlFor={gender.id} className="ml-2 block text-sm/6 font-medium text-gray-900">
@@ -247,9 +296,9 @@ console.log(formData.firstName);
                     <select
                       id="age"
                       name="age"
-                      className="block w-full appearance-none rounded-md bg-white py-1.5 pl-4 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-                      defaultValue=""
-                    >
+                      value={formData.age}
+                      onChange={handleChangeInput}
+                      className="block w-full appearance-none rounded-md bg-white py-1.5 pl-4 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6">
                       <option value="" disabled>
                         Select your age
                       </option>
@@ -271,6 +320,8 @@ console.log(formData.firstName);
                       name="profileUrl"
                       type="text"
                       placeholder="https://img-example.com"
+                      value={formData.profileUrl}
+                      onChange={handleChangeInput}
                       className="col-start-1 row-start-1 block w-full rounded-md bg-white py-1.5 pl-10 pr-3 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:pl-9 sm:text-sm/6"
                     />
                     <LinkIcon
@@ -286,7 +337,7 @@ console.log(formData.firstName);
                   <Select
                     isMulti
                     options={formattedSkills}
-                    value={formattedSkills.filter(skill => selectedSkills.includes(skill.value.toLowerCase()))}
+                    value={formattedSkills.filter(skill => formData.skills.includes(skill.value.toLowerCase()))}
                     onChange={handleChange}
                     getOptionLabel={(e) => <span className="text-sm text-gray-900">{e.label}</span>}
                     className="basic-multi-select"
@@ -304,9 +355,10 @@ console.log(formData.firstName);
                       id="about"
                       name="about"
                       rows={4}
+                      value={formData.about}
+                      onChange={handleChangeInput}
                       placeholder='Tell us your story... or just drop a cool quote!'
                       className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-                      defaultValue={''}
                     />
                   </div>
                 </div>
@@ -317,9 +369,14 @@ console.log(formData.firstName);
                 type="submit"
                 className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
               >
-                Sign Up
+                {loader ? <span className="loading loading-infinity loading-xl"></span> : "Sign Up"}
               </button>
             </div>
+            {error && (
+              <div className="mt-2 text-sm text-red-600">
+                {error}
+              </div>
+            )}
           </form>
         </div>
         <p className="mt-10 text-center text-sm/6 text-gray-500">
