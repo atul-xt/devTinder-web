@@ -50,10 +50,20 @@ const Navbar = () => {
                     </div>
                 ) : (
                     <div className="flex flex-1 justify-end items-center">
-                        <Link to="/login" className="text-sm/6 font-semibold text-gray-900">
-                            Log in <span aria-hidden="true">&rarr;</span>
+                        <Link
+                            to="/login"
+                            className="group text-sm/6 font-semibold text-gray-900 flex items-center gap-1"
+                        >
+                            Log in
+                            <span
+                                aria-hidden="true"
+                                className="inline-block text-xl animate-bounce-x"
+                            >
+                                &rarr;
+                            </span>
                         </Link>
                     </div>
+
                 )}
             </div>
         </div>
