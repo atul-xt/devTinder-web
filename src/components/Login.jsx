@@ -4,9 +4,9 @@ import { Link, useNavigate } from 'react-router-dom'
 import { API_URL } from '../config/config';
 import { useAuth } from '../context/AuthContext';
 import axios from 'axios';
+import { toast } from 'react-toastify';
 
 const Login = () => {
-  const [error, setError] = useState("");
   const [emailId, setEmailId] = useState("");
   const [password, setPassword] = useState("");
   const [loader, setLoader] = useState(false);
@@ -17,7 +17,6 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoader(true);
-    setError("");
 
     try {
       const res = await axios.post(`${API_URL}login`, {
@@ -28,7 +27,8 @@ const Login = () => {
       });
 
       if (res.status === 200) {
-        setUser(res?.data?.data);
+        toast.success(res.data?.message)
+        setUser(res.data?.data);
         navigate("/");
       }
 
@@ -36,11 +36,11 @@ const Login = () => {
       console.error("Login error:", error);
       if (error.response) {
         const message = error.response.data?.message || "Login failed. Try again.";
-        setError(message);
+        toast.error(message);
       } else if (error.request) {
-        setError("No response from server. Please check your internet.");
+        toast.error("No response from server. Please check your internet.");
       } else {
-        setError("Something went wrong. Please try again.");
+        toast.error("Something went wrong. Please try again.");
       }
     } finally {
       setLoader(false);
@@ -226,11 +226,6 @@ const Login = () => {
                 {loader ? <span className="loading loading-infinity loading-xl"></span> : "Login"}
               </button>
             </div>
-            {error && (
-              <div className="mt-2 text-sm text-red-600">
-                {error}
-              </div>
-            )}
           </form>
           <div>
             <div className="relative mt-10">

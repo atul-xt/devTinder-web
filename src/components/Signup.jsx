@@ -24,7 +24,6 @@ const skillsList = [
 const Signup = () => {
   const navigate = useNavigate();
   const [loader, setLoader] = useState(false);
-  const [error, setError] = useState("");
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -61,7 +60,6 @@ const Signup = () => {
   const handleFormSubmit = async (e) => {
     e.preventDefault();
     setLoader(true);
-    setError("");
 
     try {
       const res = await axios.post(`${API_URL}signup`, formData, {
@@ -79,11 +77,11 @@ const Signup = () => {
 
       if (error.response) {
         const message = error.response.data?.message || "Signup failed. Try again.";
-        setError(message);
+        toast.error(message);
       } else if (error.request) {
-        setError("No response from server. Please check your internet.");
+        toast.error("No response from server. Please check your internet.");
       } else {
-        setError("Something went wrong. Please try again.");
+        toast.error("Something went wrong. Please try again.");
       }
     } finally {
       setLoader(false);
@@ -372,11 +370,6 @@ const Signup = () => {
                 {loader ? <span className="loading loading-infinity loading-xl"></span> : "Sign Up"}
               </button>
             </div>
-            {error && (
-              <div className="mt-2 text-sm text-red-600">
-                {error}
-              </div>
-            )}
           </form>
         </div>
         <p className="mt-10 text-center text-sm/6 text-gray-500">
