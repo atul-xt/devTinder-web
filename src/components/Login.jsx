@@ -2,15 +2,16 @@ import { EnvelopeIcon, LockClosedIcon } from '@heroicons/react/16/solid'
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { API_URL } from '../config/config';
-import { useAuth } from '../context/AuthContext';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import { useDispatch } from 'react-redux';
+import { setUser } from '../app/slice/authSlice';
 
 const Login = () => {
+  const dispatch = useDispatch();
   const [emailId, setEmailId] = useState("");
   const [password, setPassword] = useState("");
   const [loader, setLoader] = useState(false);
-  const { setUser } = useAuth();
 
   const navigate = useNavigate();
 
@@ -26,9 +27,11 @@ const Login = () => {
         withCredentials: true
       });
 
+      console.log(res);
+      
       if (res.status === 200) {
         toast.success(res.data?.message)
-        setUser(res.data?.data);
+        dispatch(setUser(res.data?.data));
         navigate("/");
       }
 

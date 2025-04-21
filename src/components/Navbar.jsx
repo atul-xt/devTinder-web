@@ -1,12 +1,32 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
-import { useAuth } from '../context/AuthContext'
+import axios from 'axios';
+import React, { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { Link, useNavigate } from 'react-router-dom'
+import { API_URL } from '../config/config';
+import { logout } from '../app/slice/authSlice';
+import { toast } from 'react-toastify';
 
 const Navbar = () => {
-    const { user, logout } = useAuth();
+    const { user } = useSelector((state) => state.auth);
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+
+    const handleLogout = async () => {
+        try {
+            const res = await axios.post(`${API_URL}logout`, {}, { withCredentials: true });
+            if (res.status === 200) {
+                toast.success(res.data?.message)
+                dispatch(logout());
+                navigate("/login");
+            }
+
+        } catch (error) {
+            console.error("Logout error: ", error)
+        }
+    }
 
     return (
-        <div className="sticky top-0 z-50 navbar bg-base-100 shadow-sm w-full">
+        <div className="sticky top-0 z-50 navbar bg-base-100 shadow-sm w-full" >
             <div className='max-w-7xl mx-auto w-full flex px-10 max-sm:px-3'>
                 <div className="flex-1">
                     <Link to="/" className='flex w-fit cursor-pointer'>
@@ -25,7 +45,8 @@ const Navbar = () => {
                     </Link>
                 </div>
                 {user ? (
-                    <div className="flex gap-2">
+                    <div className="flex items-center gap-2">
+                        <span className='font-mono font-semibold'>Welcome, {user.firstName}</span>
                         <div className="dropdown dropdown-end">
                             <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">
                                 <div className="w-10 rounded-full">
@@ -44,7 +65,7 @@ const Navbar = () => {
                                     </Link>
                                 </li>
                                 <li><Link to="/settings">Settings</Link></li>
-                                <li><Link onClick={() => logout()}>Logout</Link></li>
+                                <li><Link onClick={handleLogout}>Logout</Link></li>
                             </ul>
                         </div>
                     </div>
