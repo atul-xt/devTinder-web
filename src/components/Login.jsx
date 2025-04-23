@@ -32,7 +32,7 @@ const Login = () => {
       if (res.status === 200) {
         toast.success(res.data?.message)
         dispatch(setUser(res.data?.data));
-        navigate("/");
+        navigate("/feed");
       }
 
     } catch (error) {

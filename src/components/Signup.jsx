@@ -15,11 +15,14 @@ const genders = [
 ]
 
 const skillsList = [
-  "HTML", "CSS", "JavaScript", "TypeScript", "React", "Next.js", "Vue.js",
-  "Angular", "Node.js", "Express", "MongoDB", "GraphQL", "MySQL", "PostgreSQL",
-  "Python", "Django", "Flask", "Java", "Spring Boot", "C#", ".NET", "Git", "GitHub",
-  "Tailwind CSS", "Redux", "Zustand", "Docker", "Firebase"
+  "HTML", "CSS", "JavaScript", "TypeScript", "React", "NextJS", "VueJS",
+  "Angular", "NodeJS", "Express", "MongoDB", "GraphQL", "MySQL", "PostgreSQL",
+  "Python", "Django", "Pytorch", "Java", "Spring", "Csharp",
+  "Git", "GitHub", "TailwindCSS", "Redux", "Firebase", "Bootstrap", "Cpp",
+  "Dart", "Figma", "Flutter", "Go", "GSAP", "Postman", "Jquery", "Kotlin",
+  "PHP", "Laravel", "Prisma", "Redis", "Ruby", "Rust", "ThreeJS", "Wordpress"
 ];
+
 
 const Signup = () => {
   const navigate = useNavigate();

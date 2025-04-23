@@ -1,5 +1,5 @@
 import axios from 'axios';
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom'
 import { API_URL } from '../config/config';
@@ -19,7 +19,6 @@ const Navbar = () => {
                 dispatch(logout());
                 navigate("/login");
             }
-
         } catch (error) {
             console.error("Logout error: ", error)
         }
@@ -27,7 +26,7 @@ const Navbar = () => {
 
     return (
         <div className="sticky top-0 z-50 navbar bg-base-100 shadow-sm w-full" >
-            <div className='max-w-7xl mx-auto w-full flex px-10 max-sm:px-3'>
+            <div className='max-w-7xl mx-auto w-full flex items-center px-10 max-sm:px-3'>
                 <div className="flex-1">
                     <Link to="/" className='flex w-fit cursor-pointer'>
                         <svg
@@ -46,7 +45,7 @@ const Navbar = () => {
                 </div>
                 {user ? (
                     <div className="flex items-center gap-2">
-                        <span className='font-mono font-semibold'>Welcome, {user.firstName}</span>
+                        <span className='font-semibold max-[500px]:text-sm'>Welcome, {user.firstName}</span>
                         <div className="dropdown dropdown-end">
                             <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">
                                 <div className="w-10 rounded-full">
@@ -56,15 +55,16 @@ const Navbar = () => {
                                 </div>
                             </div>
                             <ul
-                                tabIndex={0}
                                 className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow">
                                 <li>
-                                    <Link to="/profile" className="justify-between">
-                                        Profile
+                                    <Link to="/feed" className='justify-between'>Feed
                                         <span className="badge">New</span>
                                     </Link>
                                 </li>
-                                <li><Link to="/settings">Settings</Link></li>
+                                <li><Link to="/connection">Connection</Link></li>
+                                <li><Link to="/request">Request</Link></li>
+                                <li><Link to="/subscription">Subscription</Link></li>
+                                <li><Link to="/profile">Profile</Link></li>
                                 <li><Link onClick={handleLogout}>Logout</Link></li>
                             </ul>
                         </div>
