@@ -41,7 +41,7 @@ const Body = () => {
 
     return (
         <div
-            className={`min-h-screen flex flex-col ${isHomeRoute ? 'bg-[url("assets/devTinder-BG.webp")] bg-cover bg-center' : ''
+            className={`min-h-screen flex flex-col ${isHomeRoute ? 'bg-[url("/assets/devTinder-BG.webp")] bg-cover bg-center' : ''
                 }`}
         >
             <Navbar />
