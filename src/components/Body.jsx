@@ -28,7 +28,7 @@ const Body = () => {
             }
 
         } catch (error) {
-            if (error.response.status === 401) {
+            if (error?.response?.status === 401) {
                 navigate("/login");
             }
             console.error("Fetching error: ", error.response.data.message);
