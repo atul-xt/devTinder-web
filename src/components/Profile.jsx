@@ -1,8 +1,7 @@
 import React from 'react'
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { iconMap } from '../utils/skillsIcon';
-import { ArrowLeft, Edit } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
 import ProfileInfo from './ProfileInfo';
 
 const Profile = () => {
