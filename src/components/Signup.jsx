@@ -14,13 +14,13 @@ const Signup = () => {
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
-    emailId: "@gmail.com",
-    password: "Demo@2885",
+    emailId: "",
+    password: "",
     gender: "",
     age: "",
     profileUrl: "",
-    skills: ["React", "HTML", "JavaScript", "TypeScript"],
-    about: "This is demo bio for demo accounts."
+    skills: [],
+    about: ""
   })
 
 
