@@ -15,7 +15,6 @@ const Connection = () => {
   const [userData, setUserData] = useState([]);
 
   const fetchConnections = async () => {
-    if (connection) return;
     setLoading(true);
     try {
       const apiEndPoint = `${API_URL}user/connections`;
@@ -23,7 +22,6 @@ const Connection = () => {
         withCredentials: true
       });
 
-      console.log(res);
       if (res.status === 200) {
         dispatch(setConnectionData(res?.data?.data));
       }

@@ -5,12 +5,12 @@ import { API_URL } from '../config/config'
 import { useDispatch, useSelector } from 'react-redux'
 import { setRequestData } from '../app/slice/requestSlice'
 import { Link } from 'react-router-dom'
-import { setConnectionData } from '../app/slice/connectionSlice'
+// import { setConnectionData } from '../app/slice/connectionSlice'
 
 const Request = () => {
   const dispatch = useDispatch();
   const request = useSelector((state) => state.request.requestData);
-  const connection = useSelector((state) => state.connection.connectionData);
+  // const connection = useSelector((state) => state.connection.connectionData);
   const [loading, setLoading] = useState(false);
   const [requestLoader, setRequestLoader] = useState({});
 
@@ -44,17 +44,9 @@ const Request = () => {
       })
 
       if (res.status === 201) {
-        console.log("ID: ", id);
-
-        console.log("API DATA: ", res?.data?.connectionRequest);
-
-        console.log("Connections: ", connection);
-        const updatedConnection = connection.filter(item => item._id !== id);
-        console.log("Updated Connection: ", updatedConnection);
-
-        dispatch(setConnectionData(updatedConnection));
+        // const updatedConnection = connection.filter(item => item._id !== id);
+        // dispatch(setConnectionData(updatedConnection));
         const updatedRequests = request.filter(req => req._id !== id);
-
         dispatch(setRequestData(updatedRequests));
       }
     } catch (error) {
