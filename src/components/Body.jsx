@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import Navbar from './Navbar'
-import { Outlet, useLocation, useNavigate } from 'react-router-dom'
+import { Outlet, useLocation } from 'react-router-dom'
 import Footer from './Footer'
 import axios from 'axios'
 import { useDispatch, useSelector } from 'react-redux'
@@ -9,7 +9,6 @@ import { setUser } from '../app/slice/authSlice'
 
 const Body = () => {
     const dispatch = useDispatch();
-    const navigate = useNavigate();
     const location = useLocation();
 
     const user = useSelector((state) => state.auth.user);
@@ -28,9 +27,6 @@ const Body = () => {
             }
 
         } catch (error) {
-            if (error?.response?.status === 401) {
-                navigate("/login");
-            }
             console.error("Fetching error: ", error.response.data.message);
         }
     }
