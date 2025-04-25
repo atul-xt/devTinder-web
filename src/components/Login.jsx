@@ -27,8 +27,6 @@ const Login = () => {
         withCredentials: true
       });
 
-      console.log(res);
-      
       if (res.status === 200) {
         toast.success(res.data?.message)
         dispatch(setUser(res.data?.data));
@@ -36,15 +34,8 @@ const Login = () => {
       }
 
     } catch (error) {
+      toast.error(error.response.data?.message);
       console.error("Login error:", error);
-      if (error.response) {
-        const message = error.response.data?.message || "Login failed. Try again.";
-        toast.error(message);
-      } else if (error.request) {
-        toast.error("No response from server. Please check your internet.");
-      } else {
-        toast.error("Something went wrong. Please try again.");
-      }
     } finally {
       setLoader(false);
     }

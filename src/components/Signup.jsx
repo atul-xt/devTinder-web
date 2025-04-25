@@ -5,24 +5,8 @@ import Select from 'react-select';
 import { toast } from 'react-toastify';
 import { Link, useNavigate } from 'react-router-dom'
 import { API_URL } from '../config/config';
+import { skillsList, genders } from '../utils/data';
 import { EnvelopeIcon, LinkIcon, LockClosedIcon, UserCircleIcon } from '@heroicons/react/16/solid'
-
-
-const genders = [
-  { id: 'male', title: 'Male' },
-  { id: 'female', title: 'Female' },
-  { id: 'others', title: 'Others' },
-]
-
-const skillsList = [
-  "HTML", "CSS", "JavaScript", "TypeScript", "React", "NextJS", "VueJS",
-  "Angular", "NodeJS", "Express", "MongoDB", "GraphQL", "MySQL", "PostgreSQL",
-  "Python", "Django", "Pytorch", "Java", "Spring", "Csharp",
-  "Git", "GitHub", "TailwindCSS", "Redux", "Firebase", "Bootstrap", "Cpp",
-  "Dart", "Figma", "Flutter", "Go", "GSAP", "Postman", "Jquery", "Kotlin",
-  "PHP", "Laravel", "Prisma", "Redis", "Ruby", "Rust", "ThreeJS", "Wordpress"
-];
-
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -30,13 +14,13 @@ const Signup = () => {
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
-    emailId: "",
-    password: "",
+    emailId: "@gmail.com",
+    password: "Demo@2885",
     gender: "",
     age: "",
     profileUrl: "",
-    skills: [],
-    about: ""
+    skills: ["React", "HTML", "JavaScript", "TypeScript"],
+    about: "This is demo bio for demo accounts."
   })
 
 
@@ -46,7 +30,7 @@ const Signup = () => {
   }));
 
   const handleChange = (selectedOption) => {
-    const valuesArray = selectedOption.map((option) => option.value.toLowerCase());
+    const valuesArray = selectedOption.map((option) => option.value);
     setFormData((prev) => ({
       ...prev,
       skills: valuesArray,
@@ -338,7 +322,7 @@ const Signup = () => {
                   <Select
                     isMulti
                     options={formattedSkills}
-                    value={formattedSkills.filter(skill => formData.skills.includes(skill.value.toLowerCase()))}
+                    value={formattedSkills.filter(skill => formData.skills.includes(skill.value))}
                     onChange={handleChange}
                     getOptionLabel={(e) => <span className="text-sm text-gray-900">{e.label}</span>}
                     className="basic-multi-select"

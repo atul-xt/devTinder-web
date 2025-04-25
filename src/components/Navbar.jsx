@@ -3,8 +3,21 @@ import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom'
 import { API_URL } from '../config/config';
-import { logout } from '../app/slice/authSlice';
 import { toast } from 'react-toastify';
+import { removeUser } from '../app/slice/authSlice';
+import { removeConnectionData } from '../app/slice/connectionSlice';
+import { removeFeedData } from '../app/slice/feedSlice';
+import { removeRequestData } from '../app/slice/requestSlice';
+
+const menuItems = [
+    { label: 'Feed', path: '/feed', badge: 'New' },
+    { label: 'Connection', path: '/connection' },
+    { label: 'Request', path: '/request' },
+    { label: 'Subscription', path: '/subscription' },
+    { label: 'Profile', path: '/profile' },
+    { label: 'Logout', path: '/', isLogout: true }
+];
+
 
 const Navbar = () => {
     const { user } = useSelector((state) => state.auth);
@@ -16,7 +29,10 @@ const Navbar = () => {
             const res = await axios.post(`${API_URL}logout`, {}, { withCredentials: true });
             if (res.status === 200) {
                 toast.success(res.data?.message)
-                dispatch(logout());
+                dispatch(removeUser());
+                dispatch(removeConnectionData());
+                dispatch(removeFeedData());
+                dispatch(removeRequestData());
                 navigate("/login");
             }
         } catch (error) {
@@ -25,7 +41,7 @@ const Navbar = () => {
     }
 
     return (
-        <div className="sticky top-0 z-50 navbar bg-base-100 shadow-sm w-full" >
+        <div className="sticky top-0 z-50 navbar bg-gray-100 shadow-sm w-full" >
             <div className='max-w-7xl mx-auto w-full flex items-center px-10 max-sm:px-3'>
                 <div className="flex-1">
                     <Link to="/" className='flex w-fit cursor-pointer'>
@@ -45,7 +61,7 @@ const Navbar = () => {
                 </div>
                 {user ? (
                     <div className="flex items-center gap-2">
-                        <span className='font-semibold max-[500px]:text-sm'>Welcome, {user.firstName}</span>
+                        <span className='font-semibold max-[500px]:text-sm max-[380px]:hidden'>Welcome, {user.firstName}</span>
                         <div className="dropdown dropdown-end">
                             <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">
                                 <div className="w-10 rounded-full">
@@ -54,18 +70,22 @@ const Navbar = () => {
                                         src={user.profileUrl} />
                                 </div>
                             </div>
-                            <ul
-                                className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow">
-                                <li>
-                                    <Link to="/feed" className='justify-between'>Feed
-                                        <span className="badge">New</span>
-                                    </Link>
-                                </li>
-                                <li><Link to="/connection">Connection</Link></li>
-                                <li><Link to="/request">Request</Link></li>
-                                <li><Link to="/subscription">Subscription</Link></li>
-                                <li><Link to="/profile">Profile</Link></li>
-                                <li><Link onClick={handleLogout}>Logout</Link></li>
+                            <ul className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow">
+                                {menuItems.map(({ label, path, badge, isLogout }, index) => (
+                                    <li key={index}>
+                                        <Link
+                                            to={path}
+                                            onClick={(e) => {
+                                                e.currentTarget.blur();
+                                                if (isLogout) handleLogout();
+                                            }}
+                                            className={badge ? 'justify-between' : ''}
+                                        >
+                                            {label}
+                                            {badge && <span className="badge">{badge}</span>}
+                                        </Link>
+                                    </li>
+                                ))}
                             </ul>
                         </div>
                     </div>

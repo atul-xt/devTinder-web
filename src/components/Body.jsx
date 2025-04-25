@@ -1,17 +1,19 @@
 import React, { useEffect } from 'react'
 import Navbar from './Navbar'
-import { Outlet, useNavigate } from 'react-router-dom'
+import { Outlet, useLocation, useNavigate } from 'react-router-dom'
 import Footer from './Footer'
 import axios from 'axios'
 import { useDispatch, useSelector } from 'react-redux'
 import { API_URL } from '../config/config'
 import { setUser } from '../app/slice/authSlice'
-import { toast } from 'react-toastify'
 
 const Body = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const { user } = useSelector((state) => state.auth);
+    const location = useLocation();
+
+    const user = useSelector((state) => state.auth.user);
+    const isHomeRoute = location.pathname === '/';
 
     const fetchUser = async () => {
         if (user) return;
@@ -38,9 +40,14 @@ const Body = () => {
     }, [])
 
     return (
-        <div>
+        <div
+            className={`min-h-screen flex flex-col ${isHomeRoute ? 'bg-[url("assets/devTinder-BG.webp")] bg-cover bg-center' : ''
+                }`}
+        >
             <Navbar />
-            <Outlet />
+            <div className="flex-1">
+                <Outlet />
+            </div>
             <Footer />
         </div>
     )

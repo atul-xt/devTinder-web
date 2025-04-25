@@ -8,15 +8,15 @@ import { Provider } from 'react-redux'
 import { store } from './app/store.js'
 
 createRoot(document.getElementById('root')).render(
-  <StrictMode>
-    <Provider store={store}>
-      <App />
-      <ToastContainer
-        position="top-right"
-        autoClose={1000}
-        pauseOnHover
-        theme="light"
-      />
-    </Provider>
-  </StrictMode>
+  // <StrictMode>
+  <Provider store={store}>
+    <App />
+    <ToastContainer
+      position="top-right"
+      autoClose={1000}
+      pauseOnHover
+      theme="light"
+    />
+  </Provider>
+  // </StrictMode>
 )
