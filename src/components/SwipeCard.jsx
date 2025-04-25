@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { use, useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { iconMap } from "../utils/skillsIcon";
 import { toast } from "react-toastify";
@@ -7,15 +7,9 @@ import { API_URL } from "../config/config";
 import { useDispatch } from "react-redux";
 import { removeOneUser } from "../app/slice/feedSlice";
 
-const SwipeCard = ({ cards }) => {
-    const dispatch = useDispatch();
-    const [currentIndex, setCurrentIndex] = useState(0);
-    const [swipeDirection, setSwipeDirection] = useState(null);
-    const [dragRotate, setDragRotate] = useState(0);
-    const [dragStatus, setDragStatus] = useState(null);
-    const [showAbout, setShowAbout] = useState(false);
+const SwipeCard = ({ cards, loading }) => {
 
-    if (!cards || cards.length === 0) {
+    if (loading) {
         return <div className="min-h-[620px] w-full flex items-center justify-center overflow-hidden">
             <div className="w-80 h-[500px] bg-gray-200 animate-pulse rounded-2xl shadow-xl">
                 <div className="h-full w-full flex flex-col justify-end p-5">
@@ -29,14 +23,45 @@ const SwipeCard = ({ cards }) => {
         </div>;
     }
 
+    if (!cards) return;
+
+    const dispatch = useDispatch();
+    const [currentId, setCurrentId] = useState(cards[0]?._id);
+    const [swipeDirection, setSwipeDirection] = useState(null);
+    const [dragRotate, setDragRotate] = useState(0);
+    const [dragStatus, setDragStatus] = useState(null);
+    const [showAbout, setShowAbout] = useState(false);
+    const [isUserExist, setIsUserExist] = useState(true);
+
+
+    const currentIndex = cards.findIndex(card => card._id === currentId);
     const topCard = cards[currentIndex];
     const nextCard = cards[currentIndex + 1];
 
-    const handleSwipe = (direction) => {
+    useEffect(() => {
+        const tried = localStorage.getItem("triedOnce");
+
+        if (tried === "true" && (!cards || cards.length === 0)) {
+            setIsUserExist(false);
+        }
+
+        if (cards && cards.length > 0) {
+            localStorage.removeItem("triedOnce");
+        }
+    }, [cards]);
+
+    const handleRefresh = () => {
+        localStorage.setItem("triedOnce", "true");
+        window.location.reload();
+    };
+
+
+    const handleSwipe = (direction, callback) => {
         setSwipeDirection(direction);
         setTimeout(() => {
-            setCurrentIndex((prev) => prev + 1);
             setSwipeDirection(null);
+            setCurrentId(cards[currentIndex + 1]?._id);
+            if (callback) callback();
         }, 300);
     };
 
@@ -64,11 +89,9 @@ const SwipeCard = ({ cards }) => {
 
     const onDragEnd = (event, info) => {
         if (info.offset.x > 100) {
-            sendRequest();
-            handleSwipe("right");
+            handleSwipe("right", sendRequest);
         } else if (info.offset.x < -100) {
-            sendRequest();
-            handleSwipe("left");
+            handleSwipe("left", sendRequest);
         }
 
         setDragStatus(null);
@@ -90,6 +113,37 @@ const SwipeCard = ({ cards }) => {
             toast.error(error?.response?.data?.message);
             console.error("Error: ", error)
         }
+    }
+
+    if (!isUserExist) {
+        return (
+            <div className="min-h-[620px] w-full flex flex-col gap-4 items-center justify-center overflow-hidden text-center">
+                <span className="text-lg font-semibold">No More Users Found.</span>
+                <p className="text-sm text-gray-500 max-w-md">
+                    Lagta hai saare developers chhup gaye hain! 👀<br />
+                    Apne coding buddy ko bulao, unhe bhi yeh app dikhao.<br />
+                    Kya pata agla match wahi nikle! 😉💻
+                </p>
+            </div>
+        );
+    }
+
+    if (!cards || cards.length === 0) {
+        return (
+            <div className="min-h-[620px] w-full flex flex-col gap-4 items-center justify-center overflow-hidden text-center">
+                <span className="text-lg font-semibold">Load More Users?</span>
+                <p className="text-sm text-gray-500 max-w-xs sm:max-w-xl">
+                    Swipe toh kar liya... ab refresh bhi kar lo! 😏<br />
+                    Ho sakta hai agla user VS Code se sidha yahan tapak jaye! 😂👨‍💻
+                </p>
+                <button
+                    onClick={handleRefresh}
+                    className="px-5 py-2 bg-black text-white rounded-lg font-semibold tracking-widest uppercase text-xs active:scale-90 transition duration-200 ease-linear"
+                >
+                    Refresh
+                </button>
+            </div>
+        );
     }
 
     return (

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import SwipeCard from './SwipeCard'
 import axios from 'axios';
 import { API_URL } from '../config/config';
@@ -8,10 +8,10 @@ import { setFeedData } from '../app/slice/feedSlice';
 const Feed = () => {
     const dispatch = useDispatch();
     const { feedData } = useSelector((state) => state.feed);
-
+    const [loading, setLoading] = useState(false);
 
     const fetchFeedData = async () => {
-        if (feedData) return;
+        setLoading(true);
 
         try {
             const apiEndPoint = `${API_URL}user/feed`;
@@ -23,9 +23,10 @@ const Feed = () => {
             }
         } catch (error) {
             console.error("Error: ", error.response.data.message);
+        } finally {
+            setLoading(false);
         }
     }
-
 
     useEffect(() => {
         fetchFeedData();
@@ -33,7 +34,7 @@ const Feed = () => {
 
 
     return (
-        <SwipeCard cards={feedData} />
+        <SwipeCard cards={feedData} loading={loading} />
     )
 }
 

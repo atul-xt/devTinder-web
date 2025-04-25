@@ -54,7 +54,7 @@ const ProfileInfo = (data) => {
                         </div>
                     </div>
                 </div>
-                {setOpenInfo && (<span className='mt-5 text-sm bg-yellow-400 rounded-3xl px-3 text-black'>Chatting Functionality will be soon...!</span>)}
+                {setOpenInfo && (<span className='mt-5 text-sm bg-gray-200 rounded-3xl py-0.5 animate-bounce px-3 text-black'>Chatting Functionality will be soon...!</span>)}
                 {isEdit && (
                     <div className='mt-5'>
                         <Link to="/profile/edit">

@@ -66,24 +66,25 @@ const Connection = () => {
               </div>
             </div>
           ))}
-
         </div>
       </div>
     )
 
   return (
-    <div className='flex min-h-full flex-1 flex-col justify-center items-center pt-5 pb-10 sm:py-12 px-3 sm:px-6 lg:px-8'>
+    <div className='flex flex-1 flex-col justify-center items-center py-4 sm:pb-10 sm:py-12 px-3 sm:px-6 lg:px-8'>
       <div className='mx-auto w-full max-w-3xl'>
         <div className='bg-white shadow rounded-lg p-5 sm:p-12'>
-          <div className="mx-auto w-full max-w-2xl">
+          <div className="mx-auto w-full max-w-2xl text-left">
             <h2 className="text-xl/9 font-semibold tracking-tight text-gray-900">
-              {connection ? "Connections" : "No Connections Found"}
+              {connection ? "Connections 🔗" : "No Connections Found 😕"}
             </h2>
-            <p className="text-sm/6 text-gray-600">
-              {connection ? "Here are the developers you've successfully connected with." : "You haven’t made any connections yet. Once you and another developer show interest in each other, they’ll appear here."}
+            <p className="text-sm/6 text-gray-600 mt-1">
+              {connection
+                ? "Tumne toh kamaal kar diya! Yeh hain wo lucky developers jo tumhare coding vibes se connect ho chuke hain 😎💻"
+                : "Abhi tak koi jod nahi bana... lagta hai tumhara match StackOverflow pe busy hai! 😅 Jald hi yahan bhi dhoom machayega! 🔥"}
             </p>
           </div>
-          <div className='mt-5'>
+          <div className='mt-5 max-h-[60vh] overflow-y-auto'>
             {connection?.map((item, index) => (
               <div key={index} className="mt-3 bg-gray-100 rounded-3xl w-full py-3 px-3">
                 <div className='flex items-center justify-between'>
@@ -95,7 +96,6 @@ const Connection = () => {
                     </div>
                   </div>
                   <div className="flex gap-4">
-                    {/* Accept Button */}
                     <button
                       onClick={() => {
                         setUserData(item);
@@ -117,13 +117,13 @@ const Connection = () => {
       </div>
       {!connection && (
         <div className='mt-10'>
-          <Link to="/feed" className="px-4 py-2 text-white bg-black hover:bg-white hover:border hover:border-gray-300 active:scale-95 hover:text-black rounded-xl transition duration-300">
+          <Link to="/feed" className="px-4 py-2 text-white uppercase text-xs font-semibold tracking-widest bg-black hover:bg-white hover:border hover:border-gray-300 active:scale-95 hover:text-black rounded-lg transition duration-300">
             Explore Feed Page
           </Link>
         </div>
       )}
       {openInfo && (
-        <div className='absolute inset-0 z-10 h-screen backdrop-blur-md bg-black/10 w-full flex items-center justify-center px-3'>
+        <div className='absolute inset-0 z-10 max-sm:h-[110vh] backdrop-blur-md bg-black/10 w-full flex items-center justify-center px-3'>
           <div className='max-w-xl'>
             <ProfileInfo user={userData} close={true} setOpenInfo={setOpenInfo} />
           </div>
