@@ -1,15 +1,16 @@
 import React from 'react'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import Body from './components/Body'
-import Login from './components/Login'
-import Signup from './components/Signup'
-import Profile from './components/Profile'
-import Feed from './components/Feed'
-import Connection from './components/Connection'
-import Request from './components/Request'
-import Subscription from './components/Subscription'
-import EditProfile from './components/EditProfile'
-import Home from './components/Home'
+
+const Login = lazy(() => import('./components/Login'))
+const Signup = lazy(() => import('./components/Signup'))
+const Profile = lazy(() => import('./components/Profile'))
+const Feed = lazy(() => import('./components/Feed'))
+const Connection = lazy(() => import('./components/Connection'))
+const Request = lazy(() => import('./components/Request'))
+const Subscription = lazy(() => import('./components/Subscription'))
+const EditProfile = lazy(() => import('./components/EditProfile'))
+const Home = lazy(() => import('./components/Home'))
 
 const App = () => {
 

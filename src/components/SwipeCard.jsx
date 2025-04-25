@@ -1,23 +1,11 @@
 import { useState } from "react";
-import { motion, AnimatePresence, useMotionValue } from "framer-motion";
-import {
-    HTMLIcon, CSSIcon, JavaScriptIcon, TypeScriptIcon, ReactIcon, NextJSIcon,
-    VueJSIcon, AngularIcon, NodeJSIcon, ExpressIcon, MongoDBIcon, GraphQLIcon,
-    MySQLIcon, PostgreSQLIcon, PythonIcon, DjangoIcon, PytorchIcon,
-    JavaIcon, SpringIcon, CsharpIcon, GitIcon, GitHubIcon,
-    TailwindCSSIcon, ReduxIcon, FirebaseIcon, BootstrapIcon, CppIcon,
-    DartIcon, FigmaIcon, FlutterIcon, GoIcon, GSAPIcon, PostmanIcon,
-    JqueryIcon, KotlinIcon, PHPIcon, LaravelIcon, PrismaIcon, RedisIcon,
-    RubyIcon, RustIcon, ThreeJSIcon, WordpressIcon,
-    iconMap
-} from "../utils/skillsIcon";
+import { motion, AnimatePresence } from "framer-motion";
+import { iconMap } from "../utils/skillsIcon";
 import { toast } from "react-toastify";
 import axios from "axios";
 import { API_URL } from "../config/config";
 import { useDispatch } from "react-redux";
 import { removeOneUser } from "../app/slice/feedSlice";
-
-let requestCount = 0;
 
 const SwipeCard = ({ cards }) => {
     const dispatch = useDispatch();

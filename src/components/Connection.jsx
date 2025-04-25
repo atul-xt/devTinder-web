@@ -1,11 +1,11 @@
 import axios from 'axios'
-import React, { useEffect, useState } from 'react'
+import React, { lazy, useEffect, useState } from 'react'
 import { API_URL } from '../config/config'
 import { useDispatch, useSelector } from 'react-redux'
 import { setConnectionData } from '../app/slice/connectionSlice'
 import { Link } from 'react-router-dom'
-import ProfileInfo from './ProfileInfo'
-import { MousePointerClick } from 'lucide-react'
+
+const ProfileInfo = lazy(() => import('./ProfileInfo'))
 
 const Connection = () => {
   const dispatch = useDispatch();
@@ -103,7 +103,9 @@ const Connection = () => {
                       }}
                       className="px-4 py-1 flex gap-1 items-center rounded-full max-sm:text-xs text-sm bg-black text-white font-medium shadow-sm hover:bg-white hover:border hover:border-gray-300 hover:text-black active:scale-90 transition-all duration-150"
                     >
-                      <MousePointerClick size={18} />
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="size-5">
+                        <path d="M10 1a.75.75 0 0 1 .75.75v1.5a.75.75 0 0 1-1.5 0v-1.5A.75.75 0 0 1 10 1ZM5.05 3.05a.75.75 0 0 1 1.06 0l1.062 1.06A.75.75 0 1 1 6.11 5.173L5.05 4.11a.75.75 0 0 1 0-1.06ZM14.95 3.05a.75.75 0 0 1 0 1.06l-1.06 1.062a.75.75 0 0 1-1.062-1.061l1.061-1.06a.75.75 0 0 1 1.06 0ZM3 8a.75.75 0 0 1 .75-.75h1.5a.75.75 0 0 1 0 1.5h-1.5A.75.75 0 0 1 3 8ZM14 8a.75.75 0 0 1 .75-.75h1.5a.75.75 0 0 1 0 1.5h-1.5A.75.75 0 0 1 14 8ZM7.172 10.828a.75.75 0 0 1 0 1.061L6.11 12.95a.75.75 0 0 1-1.06-1.06l1.06-1.06a.75.75 0 0 1 1.06 0ZM10.766 7.51a.75.75 0 0 0-1.37.365l-.492 6.861a.75.75 0 0 0 1.204.65l1.043-.799.985 3.678a.75.75 0 0 0 1.45-.388l-.978-3.646 1.292.204a.75.75 0 0 0 .74-1.16l-3.874-5.764Z" />
+                      </svg>
                       Profile
                     </button>
                   </div>

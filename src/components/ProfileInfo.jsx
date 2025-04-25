@@ -1,15 +1,16 @@
 import React from 'react'
 import { Link } from 'react-router-dom';
 import { iconMap } from '../utils/skillsIcon';
-import { Edit, X } from 'lucide-react';
 
 const ProfileInfo = (data) => {
     const { user, isEdit, setOpenInfo } = data;
     return (
         <div className="relative bg-white shadow rounded-lg py-10 px-6 sm:p-12">
             {setOpenInfo && (
-                <div onClick={() => setOpenInfo(false)} className='absolute right-10'>
-                    <X />
+                <div onClick={() => setOpenInfo(false)} className='absolute right-8 top-8'>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="size-6 hover:scale-120 transition duration-200 ease-in-out hover:text-black hover:bg-gray-200 text-gray-600 rounded-full">
+                        <path d="M6.28 5.22a.75.75 0 0 0-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 1 0 1.06 1.06L10 11.06l3.72 3.72a.75.75 0 1 0 1.06-1.06L11.06 10l3.72-3.72a.75.75 0 0 0-1.06-1.06L10 8.94 6.28 5.22Z" />
+                    </svg>
                 </div>
             )}
             <div className='flex flex-col items-center justify-center'>
@@ -22,7 +23,7 @@ const ProfileInfo = (data) => {
                         {user?.gender ? user.gender[0].toUpperCase() + user.gender.slice(1) : ""}
                     </span>
                 </div>
-                <div className='w-full'>
+                <div className='w-full sm:min-w-sm'>
                     <div className="mt-5 bg-gray-100 rounded-3xl py-4 px-5">
                         <div className="flex gap-1 items-center">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="size-4">
@@ -57,8 +58,11 @@ const ProfileInfo = (data) => {
                 {isEdit && (
                     <div className='mt-5'>
                         <Link to="/profile/edit">
-                            <button className="flex items-center gap-1 px-4 py-2 text-sm rounded-md bg-black text-white font-medium shadow-sm hover:bg-white hover:border hover:border-gray-300 hover:text-black active:scale-90 transition-all duration-150">
-                                <Edit className="mr-2 h-4 w-4" />
+                            <button className="flex items-center gap-1 px-4 py-2 text-xs sm:text-sm rounded-md bg-black text-white font-medium shadow-sm hover:bg-white hover:border hover:border-gray-300 hover:text-black active:scale-90 transition-all duration-150">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="size-4 sm:size-5">
+                                    <path d="m5.433 13.917 1.262-3.155A4 4 0 0 1 7.58 9.42l6.92-6.918a2.121 2.121 0 0 1 3 3l-6.92 6.918c-.383.383-.84.685-1.343.886l-3.154 1.262a.5.5 0 0 1-.65-.65Z" />
+                                    <path d="M3.5 5.75c0-.69.56-1.25 1.25-1.25H10A.75.75 0 0 0 10 3H4.75A2.75 2.75 0 0 0 2 5.75v9.5A2.75 2.75 0 0 0 4.75 18h9.5A2.75 2.75 0 0 0 17 15.25V10a.75.75 0 0 0-1.5 0v5.25c0 .69-.56 1.25-1.25 1.25h-9.5c-.69 0-1.25-.56-1.25-1.25v-9.5Z" />
+                                </svg>
                                 Edit Profile
                             </button>
                         </Link>
